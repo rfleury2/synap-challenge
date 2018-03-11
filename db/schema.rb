@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180309200705) do
+ActiveRecord::Schema.define(version: 20180311120509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,16 @@ ActiveRecord::Schema.define(version: 20180309200705) do
     t.decimal  "starting_weight"
     t.decimal  "up_by"
   end
+
+  create_table "person_league_joins", force: true do |t|
+    t.integer  "person_id"
+    t.integer  "league_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "person_league_joins", ["league_id"], name: "index_person_league_joins_on_league_id", using: :btree
+  add_index "person_league_joins", ["person_id"], name: "index_person_league_joins_on_person_id", using: :btree
 
   create_table "user_location_joins", force: true do |t|
     t.integer  "location_id", null: false

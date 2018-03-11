@@ -1,0 +1,12 @@
+%h1{class: 'text-center'}= "WEIGH-IN #{@event.name}"
+%h2{class: 'text-center'}= @event.tagline
+%table{border: 0, class: 'table table-condensed borderless'}
+  %tr
+    %th{class: 'ordinal'}
+    %th{class: 'text-left person-name'} LEAGUE
+  - @leagues.each_with_index do |league, index|
+    %tr
+      %td{class: 'ordinal'}= index
+      %td{class: "text-left"}=link_to(league.name, event_league_path(@event, league))
+%h3
+  %a= link_to('Back to event', event_path(@event), class: 'btn btn-default btn-block navbar navbar-fixed-bottom')

@@ -23,7 +23,11 @@ def seed_participants
     if is_new_league 
       league = League.find_or_create_by!(name: league_name, event: event, date: league_date)
       previous_league = league
+    else 
+      league = previous_league
     end
+
+    league.person_league_joins.find_or_create_by!(person: person)
   end
 end
 

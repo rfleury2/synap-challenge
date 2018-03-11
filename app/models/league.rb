@@ -1,4 +1,5 @@
 class League < ActiveRecord::Base
-  has_many :people
   belongs_to :event
+  has_many :person_league_joins
+  has_many :people, through: :person_league_joins
 end
