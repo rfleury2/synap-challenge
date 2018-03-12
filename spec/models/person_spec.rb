@@ -7,11 +7,15 @@ describe Person do
   let(:c1) { CreateCheckin.call(person, e1, 100, user)}
   let(:c2) { CreateCheckin.call(person, e1, 200, user)}
   let(:c3) { CreateCheckin.call(person, e1, 250, user)}
+  let(:checkin1) { Checkin.find_by(weight: 100) }
+  let(:checkin2) { Checkin.find_by(weight: 200) }
+  let(:checkin3) { Checkin.find_by(weight: 200) }
 
   let(:e2) { Event.create(name: '2', created_at: 1.day.ago)}
   let(:c4) { CreateCheckin.call(person, e2, 101, user)}
   let(:c5) { CreateCheckin.call(person, e2, 202, user)}
   let(:c6) { CreateCheckin.call(person, e2, 303, user)}
+  let(:checkin4) { Checkin.find_by(weight: 101) }
 
   describe '#up_by' do
     subject { person.up_by }
@@ -76,7 +80,7 @@ describe Person do
     end
   end
   describe '#percentage_change' do
-    subject { person.percentage_change }
+    subject { person.percentage_change(e1) }
     context 'with 0 checkins' do
       it 'returns nil' do
         expect(subject).to be_nil
@@ -100,12 +104,6 @@ describe Person do
         expect(subject.to_f).to eq(150.0)
       end
     end
-    context 'with many events' do
-      before { c4; c5; c6 }
-      it 'only uses the checkins from the last event' do
-        expect(subject.to_f).to eql(200.0)
-      end
-    end
   end
   describe '#checkin_diffs' do
     subject { person.checkin_diffs }
@@ -120,6 +118,26 @@ describe Person do
       it 'maps the events to the checkins' do
         expect(subject).to eql({"1" => ['100.00','150.00'], "2" => ['101.00', '202.00']})
       end
+    end
+  end
+  describe '#checkins_for' do
+    subject { person.checkins_for(e1) }
+    before { c1; c2; c4 }
+
+    it 'only returns checkins for given event' do
+      expect(subject).to include checkin1
+      expect(subject).to include checkin2
+      expect(subject).to_not include checkin4
+    end
+  end
+  describe '#league_for' do
+    let(:league) { FactoryBot.create(:league, event: e1) }
+    before do
+      person.person_league_joins.create(league: league)
+    end
+    subject { person.league_for(e1) }
+    it 'only returns checkins for given event' do
+      expect(subject).to eq league
     end
   end
 end

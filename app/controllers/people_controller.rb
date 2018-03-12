@@ -6,7 +6,7 @@ class PeopleController < ApplicationController
   end
 
   def index
-    @event = Event.last
+    @event = Event.find_by(id: params[:event_id]) || Event.last
     unless @event
       redirect_to new_event_path
     end

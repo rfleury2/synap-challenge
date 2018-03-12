@@ -1,20 +1,23 @@
 class Person < ActiveRecord::Base
-
   has_many :checkins
   has_many :user_person_joins
   has_many :users, through: :user_person_joins
+  has_many :person_league_joins
+  has_many :leagues, through: :person_league_joins
 
   def up_by(event=nil)
     return attributes['up_by'] unless event
-    checkins_from_event = event.checkins.where(person: self).order(:created_at)
-    first_checkin = checkins_from_event.first
-    last_checkin = checkins_from_event.last
+    checkins = checkins_for(event)
+    first_checkin = checkins.first
+    last_checkin = checkins.last
     last_checkin == first_checkin ? nil : last_checkin.weight - first_checkin.weight
   end
 
-  def percentage_change
-    return unless up_by
-    @percentage_change ||= starting_weight ?  up_by.to_f / starting_weight * 100 : nil
+  def percentage_change(event)
+    weight_change = up_by(event)
+    return unless weight_change
+    beginning_weight = checkins_for(event).first.try(:weight)
+    @percentage_change ||= beginning_weight ?  weight_change.to_f / beginning_weight * 100 : nil
   end
 
   def checkin_diffs
@@ -25,5 +28,13 @@ class Person < ActiveRecord::Base
       event_diffs[event.try(:name)] = diffs.map { |d| '%.2f' % d }
     end
     event_diffs
+  end
+
+  def checkins_for(event)
+    event.checkins.where(person: self).order(:created_at)
+  end
+
+  def league_for(event)
+    leagues.find_by(event: event)
   end
 end

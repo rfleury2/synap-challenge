@@ -1,16 +1,9 @@
 %h2
   #{@event.name}
-- @event.people.each_with_index do |person, index|
-  %table
-    %tr
-      %td{class: 'ordinal'}= index
-      %td{class: "text-left"}=link_to(person.name, person_path(person.id))
-      %td{class: "text-left weight"}=person.up_by(@event)
+  %h3
+    %a= link_to('Event leagues', event_leagues_path(@event), class: 'btn btn-default btn-block')
+  %h3
+    %a= link_to('Overall event leaderboard', people_path(event_id: @event.id), class: 'btn btn-default btn-block')
   %br
-%br
-%br
-%br
-%br
-%br
 %h3
-  %a= link_to('< Back', people_path, class: 'btn btn-default btn-block navbar navbar-fixed-bottom')
+  %a= link_to('Back to Events', events_path, class: 'btn btn-default btn-block navbar navbar-fixed-bottom')
