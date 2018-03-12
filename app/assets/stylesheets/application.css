@@ -68,3 +68,6 @@ table {
 .weight {
   width: 73px;
 }
+.text-small {
+  font-size: .7em;
+}

@@ -2,7 +2,7 @@
 %h1{class: 'text-center'}=@league.name
 %h4{class: 'text-center'}="For event: #{@event.name}"
 
-=render :partial => "shared/leaderboard", locals: { participants: @league.participants_by_rank, event: @event }
+=render :partial => "shared/leaderboard", locals: { participants: @league.participants_by_rank, event: @event, show_league: false }
 
 %h3
   %a= link_to('Back to leagues', event_leagues_path(@event), class: 'btn btn-default btn-block navbar navbar-fixed-bottom')

@@ -2,6 +2,8 @@ class Person < ActiveRecord::Base
   has_many :checkins
   has_many :user_person_joins
   has_many :users, through: :user_person_joins
+  has_many :person_league_joins
+  has_many :leagues, through: :person_league_joins
 
   def up_by(event=nil)
     return attributes['up_by'] unless event
@@ -30,5 +32,9 @@ class Person < ActiveRecord::Base
 
   def checkins_for(event)
     event.checkins.where(person: self).order(:created_at)
+  end
+
+  def league_for(event)
+    leagues.find_by(event: event)
   end
 end

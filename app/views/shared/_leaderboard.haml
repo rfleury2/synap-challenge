@@ -18,7 +18,10 @@
         - people_with_current_rank = 1
       - previous_score = up_by
       - percent_text = weight_change ? "(#{weight_change.round(2)}%)" : ""
-
+      - if show_league
+        - league = person.league_for(event)
       %td{class: 'ordinal'}= rank
-      %td{class: "text-left person-name"}=link_to(person.name, person_path(person))
+      %td{class: "text-left person-name"}
+        =link_to(person.name, person_path(person))
+        %span{class: 'text-small'}=show_league ? "- #{league.name}" : ''
       %td{class: "#{positive} text-right weight"}= "#{up_by.try(:round, 3)} #{percent_text}"

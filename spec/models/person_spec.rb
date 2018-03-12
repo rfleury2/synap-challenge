@@ -130,4 +130,14 @@ describe Person do
       expect(subject).to_not include checkin4
     end
   end
+  describe '#league_for' do
+    let(:league) { FactoryBot.create(:league, event: e1) }
+    before do
+      person.person_league_joins.create(league: league)
+    end
+    subject { person.league_for(e1) }
+    it 'only returns checkins for given event' do
+      expect(subject).to eq league
+    end
+  end
 end
