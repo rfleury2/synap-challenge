@@ -1,0 +1,24 @@
+%table{border: 0, class: 'table table-condensed borderless'}
+  %tr
+    %th{class: 'ordinal'}
+    %th{class: 'text-left person-name'} NAME
+    %th{class: 'text-right weight'} UP BY
+  - previous_score = nil
+  - rank = 0
+  - people_with_current_rank = 1
+  - participants.each do |person|
+    %tr
+      - up_by = person.up_by(event)
+      - positive = up_by.try(:positive?) ? 'positive' : 'negative'
+      - weight_change = person.percentage_change(event)
+      - if up_by == previous_score
+        - people_with_current_rank += 1
+      - else
+        - rank += people_with_current_rank
+        - people_with_current_rank = 1
+      - previous_score = up_by
+      - percent_text = weight_change ? "(#{weight_change.round(2)}%)" : ""
+
+      %td{class: 'ordinal'}= rank
+      %td{class: "text-left person-name"}=link_to(person.name, person_path(person))
+      %td{class: "#{positive} text-right weight"}= "#{up_by.try(:round, 3)} #{percent_text}"

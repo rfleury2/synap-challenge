@@ -1,20 +1,9 @@
 %h2
   #{@event.name}
   %h3
-    %a= link_to('See event leagues', event_leagues_path(@event), class: 'btn btn-default btn-block')
+    %a= link_to('Event leagues', event_leagues_path(@event), class: 'btn btn-default btn-block')
+  %h3
+    %a= link_to('Overall event leaderboard', people_path(event_id: @event.id), class: 'btn btn-default btn-block')
   %br
-%div{class: 'table-container'}
-  %table{border: 0, class: 'table table-condensed borderless'}
-    %th{class: 'text-left person-name'} EVENT PARTICIPANTS
-- @event.people.each_with_index do |person, index|
-  %tr
-    %td{class: 'ordinal'}= index + 1
-    %td{class: "text-left"}=link_to(person.name, person_path(person.id))
-  %br
-%br
-%br
-%br
-%br
-%br
 %h3
   %a= link_to('Back to Events', events_path, class: 'btn btn-default btn-block navbar navbar-fixed-bottom')

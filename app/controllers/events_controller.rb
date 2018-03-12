@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
   def index
-    @events = Event.all.order(:id).reverse
+    @events = Event.all.order(:id)
   end
 
   def show
